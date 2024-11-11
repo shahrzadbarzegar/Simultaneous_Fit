@@ -146,6 +146,7 @@ void SimFitAllFilesLoops() {
         // RooRealVar* para1Gauss = new RooRealVar(("para1Gauss" + fileNames[w]).c_str(), ("first coefficient" + fileNames[w]).c_str(), 0, 1);
         // RooRealVar* para2Gauss = new RooRealVar(("para2Gauss" + fileNames[w]).c_str(), ("second coefficient" + fileNames[w]).c_str(), 1, 50);
 
+//Change the parameter ranges if the parameters were not calculated
         RooRealVar* M_top = new RooRealVar(("M_top" + fileNames[w]).c_str(), ("Top quark mass" + fileNames[w]).c_str(), TopMasses[w]);
         // RooPolyVar* muGauss = new RooPolyVar(("muGauss" + fileNames[w]).c_str(), ("Mean of Gaussian as a function of M_top" + fileNames[w]).c_str(), *mass, RooArgList(*para1Gauss, *para2Gauss));
         RooRealVar* muGauss = new RooRealVar(("mean_" + fileNames[w]).c_str(), ("mean_" + fileNames[w]).c_str() ,10, 80);
