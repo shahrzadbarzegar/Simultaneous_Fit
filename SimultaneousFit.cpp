@@ -26,13 +26,10 @@ using namespace std;
 
 void SimultaneousFit() {
 
-    // vector<TH1F*> histo;
-
     vector<const char*> file_paths = {
         "/home/comp-lab3/root/simFit/M166p5.root",
         "/home/comp-lab3/root/simFit/M169p5.root"};
 
-    // const char* histogram_name = "ToMaAn_MlMu";
     vector<string> fileNames = {"M166p5", "M169p5" };
 
     TH1F *hist_M166p5 = new TH1F("M166p5", "M166p5", 30, 0, 400);
@@ -75,8 +72,6 @@ void SimultaneousFit() {
     TCanvas* cM169 = new TCanvas("cM169", "M169p5", 800, 600);
     hist_M169p5->Draw("Hist");
 
-
-    // vector<double> weightValue;
 
     double weightValue166 =833.9*38.25*1000*4/(9*nentries_M166p5);
     double weightValue169 =833.9*38.25*1000*4/(9*nentries_M169p5);
@@ -144,7 +139,7 @@ void SimultaneousFit() {
     RooDataSet* combData = new RooDataSet("combData", "combined data", x, Index(sample),Import("M166p5",*weighted_data_M166p5),Import("M169p5",*weighted_data_M169p5));
     // RooDataSet* combData = new RooDataSet("combData", "combined data", x, Index(sample),Import("M166p5",*data_M166p5),Import("M169p5",*data_M169p5));
 
-    RooSimultaneous simPdf("simPdf","simultaneous pdf",sample) ;
+    RooSimultaneous simPdf("simPdf", "simultaneous pdf", sample) ;
 
     simPdf.addPdf(model166p5,"M166p5") ;
     simPdf.addPdf(model169p5,"M169p5") ;
