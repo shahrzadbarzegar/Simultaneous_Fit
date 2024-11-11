@@ -94,19 +94,8 @@ void SimFitAllFilesLoops() {
         TH1I * his =(TH1I*)file_Top->Get("nEles");
         double nEntries = his->GetEntries();
 
-        //////////////////////////////////////////////////////
-
-        // for (Long64_t j = 0; j < nentries_Top; j++) {
-        //     tree_Top->GetEntry(j);
-        //     // hist->GetEntry(j);
-        //     hist->Fill(ToMaAn_MlMu_value);
-
-        // }
-        //////////////////////////////////////////////////////
 
 
-        // vector<double> weightValue(nEntries);
-        // RooRealVar * nGen = new RooRealVar("nGen","nGen",nentries_Top);
         RooRealVar * nGen = new RooRealVar("nGen","nGen",nEntries);
 
         fname.str("");
