@@ -135,12 +135,14 @@ void SimFitAllFilesLoops() {
         combDataWeighted.append(combData175p5);
         combDataWeighted.append(combData178p5);
 
-
+// To fix the fraction of Gausssin function
         RooRealVar* alpha = new RooRealVar("alpha", "fraction of gaussian", 0, 1); 
 
     for (size_t w = 0; w < fileNames.size(); w++) {
-
+// To calculate different alphas for each model
         // RooRealVar* alpha = new RooRealVar(("alpha_" + fileNames[w]).c_str(), "fraction of gaussian", 0, 1); 
+
+//To examine the dependency of the Gaussian mean value on the Top mass 
         // RooRealVar* para1Gauss = new RooRealVar(("para1Gauss" + fileNames[w]).c_str(), ("first coefficient" + fileNames[w]).c_str(), 0, 1);
         // RooRealVar* para2Gauss = new RooRealVar(("para2Gauss" + fileNames[w]).c_str(), ("second coefficient" + fileNames[w]).c_str(), 1, 50);
 
