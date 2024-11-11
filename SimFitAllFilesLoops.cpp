@@ -37,31 +37,29 @@
 
 using namespace RooFit;
 using namespace std;
-// int debug = 1;
+
 void SimFitAllFilesLoops() {
 //gDebug=2;
     RooRealVar x("ToMaAn_MlMu", "ToMaAn_MlMu", 0, 250);
-    // RooRealVar * mass = new RooRealVar("ToMaAn_MlMu", "ToMaAn_MlMu", 0, 300); 
     RooCategory sample("sample", "Sample Category");
-	vector<RooFormulaVar*> weight_semilepttbar;
-	vector<RooRealVar*> wVars;
-	vector<RooDataSet*> datas;	
-	vector<RooDataSet*> Wdatas;
-    // vector<RooDataHist*> datas;	
-	// vector<RooDataHist*> Wdatas;
+    vector<RooFormulaVar*> weight_semilepttbar;
+    vector<RooRealVar*> wVars;
+    vector<RooDataSet*> datas;	
+    vector<RooDataSet*> Wdatas;
+
     vector<RooAddPdf*> models;
-	stringstream fname;
+    stringstream fname;
 
     vector<double> weightValue;
 
     vector<const char*> file_paths = {
-        "/home/comp-lab3/root/simFit/M166p5.root",
-        "/home/comp-lab3/root/simFit/M169p5.root",
-        "/home/comp-lab3/root/simFit/M171p5.root",
-        "/home/comp-lab3/root/simFit/M172p5.root",
-        "/home/comp-lab3/root/simFit/M173p5.root",
-        "/home/comp-lab3/root/simFit/M175p5.root",
-        "/home/comp-lab3/root/simFit/M178p5.root" };
+	"/home/comp-lab3/root/simFit/M166p5.root",
+	"/home/comp-lab3/root/simFit/M169p5.root",
+	"/home/comp-lab3/root/simFit/M171p5.root",
+	"/home/comp-lab3/root/simFit/M172p5.root",
+	"/home/comp-lab3/root/simFit/M173p5.root",
+	"/home/comp-lab3/root/simFit/M175p5.root",
+	"/home/comp-lab3/root/simFit/M178p5.root" };
 
 
     vector<string> fileNames = {"M166p5", "M169p5", "M171p5", "M172p5", "M173p5", "M175p5", "M178p5"};
@@ -70,12 +68,7 @@ void SimFitAllFilesLoops() {
     vector<double> allentries;
     vector<TH1F*> allHists;
 
-// if(debug==1)cout << "debug  1 :"<<endl;
 
-    // for (const auto& name : fileNames) {
-    //     sample.defineType(name.c_str());
-    // }
-// if(debug==1)cout << "debug  2 :"<<endl;
     Float_t ToMaAn_MlMu_value;
 
     for (int h = 0; h < fileNames.size(); h++) {
@@ -85,8 +78,6 @@ void SimFitAllFilesLoops() {
         TFile* file_Top = TFile::Open(file_paths[h]);
         TTree* tree_Top = (TTree*)file_Top->Get("Events");
         tree_Top->SetBranchAddress("ToMaAn_MlMu", &ToMaAn_MlMu_value);
-
-        // double nEntries = hist->GetEntries();
 
         Long64_t nentries_Top = tree_Top->GetEntries();
         cout << "Number of entries for Tree---> " << fileNames[h] << ": " << nentries_Top << endl;
@@ -101,13 +92,9 @@ void SimFitAllFilesLoops() {
         fname.str("");
 		fname << "data" << fileNames[h];
         RooFormulaVar *weight_Top= new RooFormulaVar(fname.str().c_str(), "(833.9*38.25*1000*4/(9*@0))", RooArgSet(*nGen)); 
-        ////////////////////////////////////////////
         cout<<"________ "<<fname.str().c_str()<<" sample: "<<nGen->getVal()<<" and nEntries: "<<(int)nEntries<<",   weight should be: "<<833.9*38.25*1000*4/(9*nEntries)<<endl;
-        // cout<<"________ "<<fname.str().c_str()<<" sample: "<<nGen->getVal()<<" and nentries_Top: "<<(int)nentries_Top<<",   weight should be: "<<833.9*38.25*1000*4/(9*nentries_Top)<<endl;
         weight_semilepttbar.push_back(weight_Top);
-
         sample.defineType(fileNames[h].c_str());
-
 
 ///////////////////////////////////////////////////////
         // TCanvas* c = new TCanvas(( "c" + fileNames[h]).c_str(), fileNames[h].c_str(), 800, 600);
@@ -116,8 +103,6 @@ void SimFitAllFilesLoops() {
 ///////////////////////////////////////////////////////
 
 
-        // RooRealVar weight(fname.str().c_str(), fname.str().c_str(), nEntries);
-        // for (int i=0; i<weight_semilepttbar.size();i++){
 	    datas.push_back(new RooDataSet(fname.str().c_str(), fname.str().c_str(),tree_Top, x, ""));
 		datas[datas.size()-1]->Print();
 		wVars.push_back((RooRealVar*)datas[datas.size()-1]->addColumn(*weight_semilepttbar[h]));
@@ -127,101 +112,6 @@ void SimFitAllFilesLoops() {
 		cout<<" , name:  "<<wVars[wVars.size()-1]->GetName()<<endl;
 		Wdatas[Wdatas.size()-1]->Print();		
         }
-		// for (unsigned int b = 0; b < fileNames.size(); b++) {
-        //                	cout<<"  ... appending "<<bkgFiles[b]<<endl;
-        //                	Wdatas[i]->append(*bkgdatas[b]);
-        //                	Wdatas[Wdatas.size()-1]->Print();
-		// }
-
-        // RooDataSet* weightedData = new RooDataSet(fileNames[h].c_str(), ("Weighted Dataset " + fileNames[h]).c_str(),
-        //                                       x, Import(*hist), WeightVar("weight"));
-
-        //  for (Long64_t j = 0; j < nEntries; j++) {
-        //     weightedData->add(*dataTopMass->get(j),/*nullptr,*/ weightValue[j]); // Add each entry with its corresponding weight
-        // }
-            // Wdatas.push_back(weightedData);
-        
-
-        /////////////////////////////////      
-        // RooDataHist* dataTopMass = new RooDataHist(fileNames[h].c_str(), ("Dataset " + fileNames[h]).c_str(), x, Import(*hist));
-        /////////////////////////////////
-
-        // RooDataSet* dataTopMass = new RooDataSet(fileNames[h].c_str(), ("Dataset " + fileNames[h]).c_str(), x, Import(*hist));
-        
-        /////////////////////////////////////////   
-        // dataTopMass->add(*dataTopMass, nullptr, weight_Top.getVal());
-        ////////////////////////////////////////
-
-        // datas.push_back(dataTopMass);
-
-		// wVars.push_back((RooRealVar*)datas[datas.size()-1]->addColumn(*weight_semilepttbar[h]));
-		// Wdatas.push_back(new RooDataHist(fileNames[h].c_str(), fileNames[h].c_str(),datas[datas.size()-1],*datas[datas.size()-1]->get(),0, wVars[wVars.size()-1]->GetName()));
-
-
-    
-
-// if(debug==1)cout << "debug  3 :"<<endl;
-
-        // for (int f = 0; f < allentries.size(); f++) {
-        //             weightValue[f] =833.9*38.25*1000*4/(9*allentries[f]);
-        // }
-// if(debug==1)cout << "debug  4 :"<<endl;
-
-        // RooRealVar weight_M166p5("weight_M166p5", "Weight for M166p5", weightValue[0]);
-        // RooRealVar weight_M169p5("weight_M169p5", "Weight for M169p5", weightValue[1]);
-        // RooRealVar weight_M171p5("weight_M171p5", "Weight for M171p5", weightValue[2]);
-        // RooRealVar weight_M172p5("weight_M172p5", "Weight for M172p5", weightValue[3]);
-        // RooRealVar weight_M173p5("weight_M173p5", "Weight for M173p5", weightValue[4]); 
-        // RooRealVar weight_M175p5("weight_M175p5", "Weight for M175p5", weightValue[5]);
-        // RooRealVar weight_M178p5("weight_M178p5", "Weight for M178p5", weightValue[6]); 
-
-        // RooDataHist* dataTopM166p5 = new RooDataHist("M166p5", "M166p5", x, Import(*allHists[0]));
-        // // dataTopM166p5->add(*dataTopM166p5, nullptr, weight_M166p5.getVal());
-
-        // RooDataHist* dataTopM169p5 = new RooDataHist("M169p5", "M169p5", x, Import(*allHists[1]));
-        // // dataTopM169p5->add(*dataTopM169p5, nullptr, weight_M169p5.getVal());
-
-        // RooDataHist* dataTopM171p5 = new RooDataHist("M171p5", "M171p5", x, Import(*allHists[2]));
-        // // dataTopM171p5->add(*dataTopM171p5, nullptr, weight_M171p5.getVal());
-
-        // RooDataHist* dataTopM172p5 = new RooDataHist("M172p5", "M172p5", x, Import(*allHists[3]));
-        // // dataTopM172p5->add(*dataTopM172p5, nullptr, weight_M172p5.getVal());
-
-        // RooDataHist* dataTopM173p5 = new RooDataHist("M173p5", "M1731p5", x, Import(*allHists[4]));
-        // // dataTopM173p5->add(*dataTopM173p5, nullptr, weight_M173p5.getVal());
-
-        // RooDataHist* dataTopM175p5 = new RooDataHist("M175p5", "M175p5", x, Import(*allHists[5]));
-        // // dataTopM175p5->add(*dataTopM175p5, nullptr, weight_M175p5.getVal());
-
-        // RooDataHist* dataTopM178p5 = new RooDataHist("M178p5", "M178p5", x, Import(*allHists[6]));
-        // // dataTopM178p5->add(*dataTopM178p5, nullptr, weight_M178p5.getVal());
-
-
-
-
-        // RooDataSet* weighted_data_M166p5 = new RooDataSet("weighted_data_M166p5", "Weighted Dataset M166p5",
-        //                                                 x, Import(*dataTopM166p5), WeightVar("weight_M166p5"));
-
-        // RooDataSet* weighted_data_M169p5 = new RooDataSet("weighted_data_M169p5", "Weighted Dataset M166p5",
-        //                                                 x, Import(*dataTopM169p5), WeightVar("weight_M169p5"));
-        
-        // RooDataSet* weighted_data_M171p5 = new RooDataSet("weighted_data_M171p5", "Weighted Dataset M171p5",
-        //                                                 x, Import(*dataTopM171p5), WeightVar("weight_M171p5"));
-                                                                                                        
-        // RooDataSet* weighted_data_M172p5 = new RooDataSet("weighted_data_M172p5", "Weighted Dataset M172p5",
-        //                                                 x, Import(*dataTopM172p5), WeightVar("weight_M172p5"));
-
-        // RooDataSet* weighted_data_M173p5 = new RooDataSet("weighted_data_M173p5", "Weighted Dataset M173p5",
-        //                                                 x, Import(*dataTopM173p5), WeightVar("weight_M173p5"));
-
-        // RooDataSet* weighted_data_M175p5 = new RooDataSet("weighted_data_M175p5", "Weighted Dataset M175p5",
-        //                                                 x, Import(*dataTopM175p5), WeightVar("weight_M175p5"));
-
-        // RooDataSet* weighted_data_M178p5 = new RooDataSet("weighted_data_M178p5", "Weighted Dataset M178p5",
-        //                                            x, Import(*dataTopM178p5), WeightVar("weight_M178p5"));        
-
-
-
 
 	 RooDataSet combDataWeighted("combDataWeighted", "combined data",  RooArgSet(x,*wVars[0]), Index(sample),
             Import("M166p5",*Wdatas[0]),WeightVar("dataM166p5"));
@@ -244,29 +134,7 @@ void SimFitAllFilesLoops() {
         combDataWeighted.append(combData173p5);
         combDataWeighted.append(combData175p5);
         combDataWeighted.append(combData178p5);
-    
-// // RooDataSet *combDataWeighted = new RooDataSet("combData", "combined data", x, Index(sample));
-// RooDataSet *combDataWeighted = new RooDataSet("combData", "combined data", x, Index(sample),Import("M166p5", *weighted_data_M166p5),
-// Import("M169p5", *weighted_data_M169p5),Import("M171p5", *weighted_data_M171p5),Import("M172p5", *weighted_data_M172p5),
-// Import("M173p5", *weighted_data_M173p5), Import("M175p5", *weighted_data_M175p5), Import("M178p5", *weighted_data_M178p5));
 
-// /*
-//                                       Import("M166p5", *dataTopM166p5, WeightVar(weight_M166p5.GetName())),
-//                                       Import("M169p5", *dataTopM169p5, WeightVar(weight_M169p5.GetName())),
-//                                       Import("M171p5", *dataTopM171p5, WeightVar(weight_M171p5.GetName())),
-//                                       Import("M172p5", *dataTopM172p5, WeightVar(weight_M172p5.GetName())),
-//                                       Import("M173p5", *dataTopM173p5, WeightVar(weight_M173p5.GetName())),
-//                                       Import("M175p5", *dataTopM175p5, WeightVar(weight_M175p5.GetName())),
-//                                       Import("M178p5", *dataTopM178p5, WeightVar(weight_M178p5.GetName()))
-//                                       );
-// */
-        // combDataWeighted.append(weighted_data_M166p5);
-        // combDataWeighted.append(weighted_data_M169p5);
-        // combDataWeighted.append(weighted_data_M171p5);
-        // combDataWeighted.append(weighted_data_M172p5);
-        // combDataWeighted.append(weighted_data_M173p5);
-        // combDataWeighted.append(weighted_data_M175p5);
-        // combDataWeighted.append(weighted_data_M178p5);
 
         RooRealVar* alpha = new RooRealVar("alpha", "fraction of gaussian", 0, 1); 
 
@@ -289,9 +157,7 @@ void SimFitAllFilesLoops() {
         RooFormulaVar* gammamu = new RooFormulaVar((fileNames[w] + "_formula").c_str(), "x[0] < x[1] ? x[0] : x[1]", RooArgList(x, *gamma_mu));
         RooGamma* gamma = new RooGamma(("gamma " + fileNames[w]).c_str(), ("gamma PDF for " + fileNames[w]).c_str(), x, *gamma_gamma, *gamma_beta, *gammamu);
 
-        RooAddPdf* model = new RooAddPdf(fileNames[w].c_str(), "Gaussian + Gamma PDF",
-                                        RooArgList(*gauss, *gamma), 
-                                        *alpha); 
+        RooAddPdf* model = new RooAddPdf(fileNames[w].c_str(), "Gaussian + Gamma PDF", RooArgList(*gauss, *gamma), *alpha); 
 
         models.push_back(model);
 
@@ -299,7 +165,7 @@ void SimFitAllFilesLoops() {
 
 
 
-        RooSimultaneous simPdf("simPdf","simultaneous pdf", sample);
+        RooSimultaneous simPdf("simPdf", "simultaneous pdf", sample);
 
         for (int m = 0; m < models.size(); m++) {
             simPdf.addPdf(*models[m], fileNames[m].c_str());
