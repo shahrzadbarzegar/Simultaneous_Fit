@@ -5,44 +5,51 @@
 #include <vector>
 
 void plotGraph() {
-    const int n = 7;
-    const int numGraphs = 6;
+    const int n = 6;
+    const int numGraphs = 5;
 
-    std::string fileNames[n] = {"M166p5", "M169p5", "M171p5", "M172p5", "M173p5", "M175p5", "M178p5"};
-    double mass_top[n] = {166.5, 169.5, 171.5, 172.5, 173.5, 175.5, 178.5};
+    // Names of files and variables
+    std::string fileNames[n] = {"M166p5", "M169p5", "M171p5", "M173p5", "M175p5", "M178p5"};
+    double mass_top[n] = {166.5, 169.5, 171.5, 173.5, 175.5, 178.5};
 
+    // Data arrays for each parameter and their errors
     double data[numGraphs][n] = {
-        {0.725065, 0.726588, 0.730813, 0.729184, 0.735256, 0.733477, 0.738999},   // alpha_GaussFrac
-        {30, 30, 30, 30, 30, 30, 30},                                             // gamma_beta
-        {2.44644, 2.48229, 2.49058, 2.51321, 2.52707, 2.54333, 2.57203},          // gamma_gamma
-        {59.5717, 60.7702, 61.6627, 61.974, 62.5632, 63.1756, 64.3926},           // mean_gauss
-        {8.33757, 8.40653, 8.45317, 8.29288, 8.16278, 8.33167, 8.252},            // mu_gamma
-        {16.5561, 16.9337, 17.1608, 17.0376, 17.2309, 17.414, 17.6062}            // sigma_gauss
+        {30, 30, 30, 30, 30, 30},                                             // gamma_beta
+        {2.44805, 2.48395, 2.49202, 2.52864, 2.54485, 2.5736},          // gamma_gamma
+        {59.5612, 60.7595, 61.6529, 62.5521, 63.1634, 64.3832},           // mean_gauss
+        {8.33001, 8.39546, 8.44387, 8.15394, 8.32168, 8.24161},            // mu_gamma
+        {16.5713, 16.9489, 17.1758, 17.2469, 17.43, 17.6222}            // sigma_gauss
     };
-    
+
     double errors[numGraphs][n] = {
-        {0.000291574, 0.000260022, 0.000254181, 0.000270751, 0.000228737, 0.000202304, 0.000263292}, // alphaErrors
-        {0.0544049, 0.047422, 0.0498006, 0.0420236, 0.0427316, 0.0441441, 0.0441572},                // gamma_beta_errors
-        {0.0178804, 0.017378, 0.0174462, 0.017519, 0.0174969, 0.0169983, 0.0171131},                 // gamma_gamma_errors
-        {0.216097, 0.218871, 0.219972, 0.216401, 0.217587, 0.218671, 0.217722},                     // mean_gauss_errors
-        {0.28403, 0.27647, 0.273213, 0.272109, 0.27658, 0.260442, 0.268632},                        // mu_gaamma_errors
-        {0.163794, 0.165361, 0.165082, 0.1639, 0.16413, 0.164414, 0.165027}                         // sigma_gauss_errors
+        {0.0543043, 0.0473491, 0.0492577, 0.0425215, 0.0438611, 0.0446834},                // gamma_beta_errors
+        {0.0178725, 0.0173959, 0.0175328, 0.0176342, 0.0171388, 0.0172597},                 // gamma_gamma_errors
+        {0.216601, 0.219246, 0.220383, 0.218051, 0.219187, 0.218247},                     // mean_gauss_errors
+        {0.281536, 0.275236, 0.274313, 0.278992, 0.261227, 0.269804},                        // mu_gaamma_errors
+        {0.164747, 0.16648, 0.166316, 0.165473, 0.165613, 0.166598}                         // sigma_gauss_errors
     };
 
-    std::string graphNames[numGraphs] = {"alpha_GaussFrac", "gamma_beta", "gamma_gamma", "mean_gauss", "mu_gamma", "sigma_gauss"};
+    std::string graphNames[numGraphs] = { "scale parameter", "shape parameter", "mean_gauss", "shift parameter", "sigma_gauss"};
 
+    // Loop through each graph to create and plot
     for (int i = 0; i < numGraphs; i++) {
         TGraphErrors *graph = new TGraphErrors(n, mass_top, data[i], nullptr, errors[i]);
         TCanvas *canvas = new TCanvas(("c_" + graphNames[i]).c_str(), (graphNames[i] + " and Top Mass").c_str(), 800, 600);
 
+        // Draw graph
         graph->Draw("AP");
         graph->SetMarkerStyle(21);
         graph->SetMarkerSize(1);
         graph->SetLineColor(kBlue);
-
+        graph->SetTitle((graphNames[i]).c_str());
+        graph->GetXaxis()->SetTitle("Top Quark Mass");
+	    graph->GetYaxis()->SetTitle((graphNames[i]).c_str());
+        // Fit function
         TF1 *fitFunction = new TF1("fitFunction", "pol1", mass_top[0], mass_top[n-1]);
         graph->Fit(fitFunction);
         fitFunction->SetLineColor(kRed);
+
+        // Update and save canvas
         canvas->Update();
         canvas->SaveAs(("/home/comp-lab3/root/simFit/" + graphNames[i] + ".pdf").c_str());
     }
