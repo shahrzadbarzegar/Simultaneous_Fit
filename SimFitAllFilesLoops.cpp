@@ -127,7 +127,7 @@ void SimFitAllFilesLoops() {
         combDataWeighted.append(combData175p5);
         combDataWeighted.append(combData178p5);
 
-// To fix the fraction of Gausssin function
+// To fix the fraction of Gaussian function
         RooRealVar* alpha = new RooRealVar("alpha", "fraction of gaussian", 0, 1); 
 
     for (size_t w = 0; w < fileNames.size(); w++) {
@@ -142,7 +142,7 @@ void SimFitAllFilesLoops() {
         RooRealVar* M_top = new RooRealVar(("M_top" + fileNames[w]).c_str(), ("Top quark mass" + fileNames[w]).c_str(), TopMasses[w]);
         // RooPolyVar* muGauss = new RooPolyVar(("muGauss" + fileNames[w]).c_str(), ("Mean of Gaussian as a function of M_top" + fileNames[w]).c_str(), *mass, RooArgList(*para1Gauss, *para2Gauss));
         RooRealVar* muGauss = new RooRealVar(("mean_" + fileNames[w]).c_str(), ("mean_" + fileNames[w]).c_str() ,10, 80);
-        RooRealVar* sigmaGauss = new RooRealVar(("sigmaGauss" + fileNames[w]).c_str(), ("width of gaussian for" + fileNames[w]).c_str() ,5,0, 50);
+        RooRealVar* sigmaGauss = new RooRealVar(("sigmaGauss" + fileNames[w]).c_str(), ("width of gaussian for" + fileNames[w]).c_str() ,4,1, 50);
         RooGaussian* gauss = new RooGaussian(("gauss166" + fileNames[w]).c_str(), ("Gaussian PDF for" + fileNames[w]).c_str(), x, *muGauss, *sigmaGauss);
 
         RooRealVar* gamma_gamma = new RooRealVar(("gamma_" + fileNames[w]).c_str(), ("shape parameter" + fileNames[w]).c_str(),5, 2, 60);
