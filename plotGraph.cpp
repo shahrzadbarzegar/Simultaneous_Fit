@@ -31,26 +31,45 @@ void plotGraph() {
 
     std::string graphNames[numGraphs] = { "scale parameter", "shape parameter", "mean_gauss", "shift parameter", "sigma_gauss"};
 
-    // Loop through each graph to create and plot
-    for (int i = 0; i < numGraphs; i++) {
-        TGraphErrors *graph = new TGraphErrors(n, mass_top, data[i], nullptr, errors[i]);
-        TCanvas *canvas = new TCanvas(("c_" + graphNames[i]).c_str(), (graphNames[i] + " and Top Mass").c_str(), 800, 600);
+//To draw Graphs separately
+    // for (int i = 0; i < numGraphs; i++) {
+    //     TGraphErrors *graph = new TGraphErrors(n, mass_top, data[i], nullptr, errors[i]);
+    //     TCanvas *canvas = new TCanvas(("c_" + graphNames[i]).c_str(), (graphNames[i] + " and Top Mass").c_str(), 800, 600);
 
-        // Draw graph
+    //     graph->Draw("AP");
+    //     graph->SetMarkerStyle(21);
+    //     graph->SetMarkerSize(1);
+    //     graph->SetLineColor(kBlue);
+    //     graph->SetTitle((graphNames[i]).c_str());
+    //     graph->GetXaxis()->SetTitle("Top Quark Mass");
+    //     graph->GetYaxis()->SetTitle((graphNames[i]).c_str());
+    //     TF1 *fitFunction = new TF1("fitFunction", "pol1", mass_top[0], mass_top[n-1]);
+    //     graph->Fit(fitFunction);
+    //     fitFunction->SetLineColor(kRed);
+
+    //     canvas->Update();
+    //     canvas->SaveAs(("/home/comp-lab3/root/simFit/" + graphNames[i] + ".pdf").c_str());
+    // }
+	
+//To draw all Graphs in one Canvas
+    TCanvas *cnv = new TCanvas("c_all", "All Parameters and Top Mass", 1200, 800);
+    cnv->Divide(3, 2); 
+
+    for (int i = 0; i < numGraphs; i++) {
+        cnv->cd(i + 1); 
+
+        TGraphErrors *graph = new TGraphErrors(n, mass_top, data[i], nullptr, errors[i]);
         graph->Draw("AP");
         graph->SetMarkerStyle(21);
         graph->SetMarkerSize(1);
         graph->SetLineColor(kBlue);
-        graph->SetTitle((graphNames[i]).c_str());
+        graph->SetTitle(graphNames[i].c_str());
         graph->GetXaxis()->SetTitle("Top Quark Mass");
-	    graph->GetYaxis()->SetTitle((graphNames[i]).c_str());
-        // Fit function
-        TF1 *fitFunction = new TF1("fitFunction", "pol1", mass_top[0], mass_top[n-1]);
+        graph->GetYaxis()->SetTitle(graphNames[i].c_str());
+
+        TF1 *fitFunction = new TF1("fitFunction", "pol1", mass_top[0], mass_top[n - 1]);
         graph->Fit(fitFunction);
         fitFunction->SetLineColor(kRed);
-
-        // Update and save canvas
-        canvas->Update();
-        canvas->SaveAs(("/home/comp-lab3/root/simFit/" + graphNames[i] + ".pdf").c_str());
     }
+    cnv->SaveAs("/home/comp-lab3/root/simFit/Parametres.pdf");
 }
