@@ -56,18 +56,13 @@ void SimFitAllFilesLoops() {
 	"/home/comp-lab3/root/simFit/M166p5.root",
 	"/home/comp-lab3/root/simFit/M169p5.root",
 	"/home/comp-lab3/root/simFit/M171p5.root",
-	"/home/comp-lab3/root/simFit/M172p5.root",
 	"/home/comp-lab3/root/simFit/M173p5.root",
 	"/home/comp-lab3/root/simFit/M175p5.root",
 	"/home/comp-lab3/root/simFit/M178p5.root" };
 
 
-    vector<string> fileNames = {"M166p5", "M169p5", "M171p5", "M172p5", "M173p5", "M175p5", "M178p5"};
-    vector<double> TopMasses = {166.5, 169.5, 171.5, 172.5, 173.5, 175.5, 178.5};
-
-    vector<double> allentries;
-    vector<TH1F*> allHists;
-
+    vector<string> fileNames = {"M166p5", "M169p5", "M171p5", "M173p5", "M175p5", "M178p5"};
+    vector<double> TopMasses = {166.5, 169.5, 171.5, 173.5, 175.5, 178.5};
 
     Float_t ToMaAn_MlMu_value;
 
@@ -119,18 +114,15 @@ void SimFitAllFilesLoops() {
             Import("M169p5",*Wdatas[1]),WeightVar("dataM169p5"));
 	 RooDataSet combData171p5("combDataWeighted171p5", "combined data" ,  RooArgSet(x,*wVars[2]), Index(sample),
              Import("M171p5",*Wdatas[2]),WeightVar("dataM171p5"));
-	 RooDataSet combData172p5("combDataWeighted172p51", "combined data" ,  RooArgSet(x,*wVars[3]), Index(sample),
-             Import("M172p5",*Wdatas[3]),WeightVar("dataM172p5"));
-	 RooDataSet combData173p5("combDataWeighted173p5", "combined data" ,  RooArgSet(x,*wVars[4]), Index(sample),
-             Import("M173p5",*Wdatas[4]),WeightVar("dataM173p5"));
-	 RooDataSet combData175p5("combDataWeighted175p51", "combined data" , RooArgSet(x,*wVars[5]), Index(sample),
-             Import("M175p5",*Wdatas[5]),WeightVar("dataM175p5"));
-	 RooDataSet combData178p5("combDataWeighted178p51", "combined data" , RooArgSet(x,*wVars[6]), Index(sample),
-             Import("M178p5",*Wdatas[6]),WeightVar("dataM178p5"));
+	 RooDataSet combData173p5("combDataWeighted173p5", "combined data" ,  RooArgSet(x,*wVars[3]), Index(sample),
+             Import("M173p5",*Wdatas[3]),WeightVar("dataM173p5"));
+	 RooDataSet combData175p5("combDataWeighted175p51", "combined data" , RooArgSet(x,*wVars[4]), Index(sample),
+             Import("M175p5",*Wdatas[4]),WeightVar("dataM175p5"));
+	 RooDataSet combData178p5("combDataWeighted178p51", "combined data" , RooArgSet(x,*wVars[5]), Index(sample),
+             Import("M178p5",*Wdatas[5]),WeightVar("dataM178p5"));
 
         combDataWeighted.append(combData169p5);
         combDataWeighted.append(combData171p5);
-        combDataWeighted.append(combData172p5);
         combDataWeighted.append(combData173p5);
         combDataWeighted.append(combData175p5);
         combDataWeighted.append(combData178p5);
